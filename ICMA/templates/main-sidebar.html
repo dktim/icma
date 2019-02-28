@@ -1,0 +1,52 @@
+<script>
+    $(document).ready(function(){
+    $('.loading').fadeOut();
+    $.get('/accounts/permission/user_permission/',function(data){
+        if (data) {
+            var obj = data.split(",");
+            alert('sss');
+            for (var i=0;i<obj.length;i++){
+                document.getElementById(obj[i]).style.display = "block";
+            }
+        }
+    });
+});
+</script>
+<aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+    <div style="height: 60px">
+
+    </div>
+      <!-- Sidebar user panel (optional) -->
+      <!-- /.search form -->
+
+      <!-- Sidebar Menu -->
+
+      <ul class="sidebar-menu" id="sidebar-menu">
+{#        <li class="header">HEADER</li>#}
+        <!-- Optionally, you can add icons to the links -->
+     <li><a href="{% url 'navi' %}"><i class="fa fa-dashboard"></i> <span>首页</span></a></li>
+          {% if request.user.is_superuser %}
+        <li id="project"><a href="{% url 'project_list' %}"><i class="fa fa-link"></i> <span>项目管理</span></a></li>
+      <!--  <li id="case"><a href="{% url 'case' %}"><i class="fa fa-retweet"></i> <span>测试管理</span></a></li>--!>
+
+        <li id="user"><a href="{% url 'user_list' %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
+      
+        {% else %}
+              <li id="mydashboard"><a href="{% url 'mytask' %}"><i class="fa fa-link"></i> <span>我的工作台</span></a></li>
+      <!--
+       <li id="case"><a href="{% url 'case' %}"><i class="fa fa-retweet"></i> <span>测试管理</span></a></li>
+          <li id="project"><a href="{% url 'project_list' %}"><i class="fa fa-link"></i> <span>投产管理</span></a></li>
+          --!>
+          <!--
+       <li id="testcase"><a href="{% url 'navi' %}"><i class="fa fa fa-cog"></i> <span>用例管理</span></a></li>
+        <li id="user"><a href="{% url 'user_list' %}"><i class="fa fa-users"></i> <span>用户管理</span></a></li>
+        --!>
+          {% endif %}
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>

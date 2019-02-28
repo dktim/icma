@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+encoding//ICMA/views.py=utf-8
+encoding//accounts/models.py=utf-8
+encoding//accounts/permission.py=utf-8
+encoding//accounts/urls.py=utf-8
+encoding//accounts/user.py=utf-8
+encoding//case/models.py=utf-8
+encoding//dashboard/views.py=utf-8
+encoding//navi/urls.py=utf-8
+encoding//navi/views.py=utf-8
+encoding//project/models.py=utf-8
+encoding//project/subtask.py=utf-8
+encoding//project/tasks.py=utf-8
+encoding//project/urls.py=utf-8
+encoding//project/views.py=utf-8

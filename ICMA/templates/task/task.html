@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% block head_css_js %}
+    <script src="/statics/layer/layer.js"></script>
+{% endblock %}
+{% block content %}
+<script>
+    window.onload=init;
+    function init() {
+        showhide(2);
+    }
+    function showhide(n) {
+        var box = document.getElementById("cmdb");
+        box.className="active";
+        var box = document.getElementById("idc");
+        box.className="active";
+    }
+</script>
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+            <div class="box">
+                <div class="box-header">
+                <div class="btn-group">
+						 <a href="{% url 'task_add' %}"><li class="btn btn-success" ><b>添加任务</b></li></a>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+            
+                  <table class="table  table-bordered" id="dataform">
+                      <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" onclick="checkAll(this, 'item1');" />
+                            </th>
+                              <th>编号</th>
+                                    <th>所属项目名称</th>
+                                   
+                                     <th>任务名称</th>
+                                      <th>任务内容</th>
+                                       <th>期待完成时间</th>
+                                        <th>执行人</th>
+                                         <th>任务状态</th>
+                                         <th>负责人</th>
+                                          <th>开始时间</th>
+                                           <th>结束时间</th>
+                                      <th>子任务</th>
+                                   
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if task_info %}
+                                {% for task in task_info %}
+                                    <tr class="even gradeA">
+                                        <td class='case_id'><input type="checkbox" id="case_id" class="item1" value="{{ project.id }}" name="idc_check" /></td>
+                                         <td>{{ task.id }}</td>
+                                        <td>{{ task.project }}</td>
+                                           
+                                                <td>{{ task.task_name }}</td>
+                                                    <td>{{ task.task_content }}</td>
+                                                        <td>{{ task.expect_time }}</td>
+                                                            <td>{{ task.execute_user }}</td>
+                                                                <td
+
+                                           {% if task.status == '2' %}
+                                            <small class="label pull-right btn bg-green">执行成功</small>
+
+                                              {% elif task.status == '1' %}
+
+  <small class="label pull-right btn bg-blue">执行中</small>
+                                                {% elif task.status == '0' %}
+
+  <small class="label pull-right btn bg-yellow">未开始</small>
+                                            {% else %}
+                                               <small class="label pull-right btn bg-red">执行失败</small>
+
+                                              {% endif %}
+
+
+
+
+
+                                        </td>
+                                                                    <td>{{ task.charge_user }}</td>
+                                                                        <td>{{ task.start_time }}</td>
+                                              <td>{{ task.end_time }}</td>
+
+                                              <td>
+                                             
+                                              <a href="#"><li style="list-style-type:none" onclick="return tanchu(this.value)" value="{{ task.id }}"> 变更</li></a>
+                                             
+                                               
+
+                                              </td>
+                                        
+
+                                        
+                                        
+                                        
+
+                                       
+                                     
+                                     
+                                    </tr>
+                                {% endfor %}
+                                {% else %}
+                                    <p>No Item are available.</p>
+                                {% endif %}
+                            </tbody>
+                  </table>
+                   <a href="{% url 'subtask_add' %}"><li class="btn btn-success" ><b>增加子步骤</b></li></a>
+                </div>
+            </div>
+
+    </section>
+        <!-- /.content -->
+      </div>
+{#接收子层回传参数#}
+<input id="handle_status" value="" hidden="hidden">
+<script>
+function checkAll(sender, checkClass) {
+    var checkItems = document.getElementsByTagName('input');
+    for (var i = 0; i < checkItems.length; i++) {
+        var checkItem = checkItems[i];
+        if (checkItem.type === 'checkbox' && checkItem.className === 'item1') {
+            checkItem.checked = sender.checked;
+        }
+    }
+}
+</script>
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>
+  $(function () {
+{#    $("#example1").DataTable();#}
+    $('#dataform').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true
+    });
+  });
+</script>
+
+<!--
+<script>
+function tanchu(n){
+  layer.open({
+  type: 2,
+  title: '机房信息修改',
+  area: ['800px', '1200px'],
+  shadeClose: true, //点击遮罩关闭
+  content: ['' + n,],
+  end:function(){
+        var handle_status = $("#handle_status").val();
+        if ( handle_status == '1' ) {
+            layer.msg('保存成功！',{
+                icon: 1,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            },function(){
+                history.go(0);
+            });
+        } else if ( handle_status == '2' ) {
+            layer.msg('修改失败！',{
+                icon: 2,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            },function(){
+                history.go(0);
+            });
+        }
+    }
+  });
+}
+</script>
+!-->
+<script>
+function tanchu(n){
+  layer.open({
+  type: 2,
+  title: '状态变更',
+  area: ['600px', '600px'],
+  shadeClose: true, //点击遮罩关闭
+  content: ['/project/task/edit/' + n,],
+  end:function(){
+        var handle_status = $("#handle_status").val();
+        if ( handle_status == '1' ) {
+            layer.msg('保存成功！',{
+                icon: 1,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            },function(){
+                history.go(0);
+            });
+        } else if ( handle_status == '2' ) {
+            layer.msg('修改失败！',{
+                icon: 2,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            },function(){
+                history.go(0);
+            });
+        }
+    }
+  });
+}
+
+
+function change_info(){
+    var args = $("#mytask_form").serialize();
+    window.location = "{% url 'mytask' %}?" + args
+}
+</script>
+{% endblock %}

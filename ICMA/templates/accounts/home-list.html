@@ -1,0 +1,75 @@
+{% extends 'base-door.html' %}
+{% block content %}
+  <!--div class="content-wrapper"-->
+  <div class="content-wrapper2">
+    <!-- Content Header (Page header) -->
+    <!--section class="content-header">
+    </section-->
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Your Page Content Here -->
+      <div class="row">
+        
+        <div class="col-md-3">
+          <!-- Widget: user widget style 1 -->
+          <div class="box box-widget widget-user-2">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header bg-yellow">
+              <div class="widget-user-image">
+                <img class="img-circle" src="/static/dist/img/user1-128x128.jpg" alt="User Avatar">
+              </div>
+              <!-- /.widget-user-image -->
+              <h3 class="widget-user-username">{{ request.user.username }}</h3>
+              <h5 class="widget-user-desc">{% if request.user.username == 'admin' %}Super administrator {% elif role == 'None' %}Guest{% else %}{{role}}{% endif %}</h5>
+            </div>
+            <div class="box-footer no-padding">
+              <ul class="nav nav-stacked">
+                <li><a href="#">Projects <span class="pull-right badge bg-blue">31</span></a></li>
+                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
+                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
+                <li><a href="#">审核 <span class="pull-right badge bg-red">{{request.session.notices}}</span></a></li>
+              </ul>
+            </div>
+          </div>
+          <!-- /.widget-user -->
+        </div>    
+        
+        <div class="col-md-9">
+	  <div class="nav-tabs-custom">
+
+	    <ul class="nav nav-tabs">
+              <!--li class="active"><a href="#activity" data-toggle="tab" aria-expanded="true">待办审批</a></li>
+              <li class=""><a href="#timeline" data-toggle="tab" aria-expanded="false">Timeline</a></li>
+              <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li-->
+              <li class="active"><a href="#activity" data-toggle="tab">待办审批</a></li>
+              <li class=""><a href="#timeline" data-toggle="tab">Timeline</a></li>
+              <li class=""><a href="#settings" data-toggle="tab">Settings</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tbody><tr>
+                  <th>ID</th>
+                  <th>Date</th>
+                  <th>项目</th>
+                  <th>Title</th>
+                </tr>
+                {% for p in pendingData %}
+                <tr>
+                  <td>{{p.id}}</td>
+                  <td>{{p.adddate|date:"Y-m-d H:i:s"}}</td>
+                  <td><span class="label label-success">{{p.project}}</span></td>
+                  <td>{{p.title}}</td>
+                </tr>
+	        {% endfor %}
+              </tbody></table>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+{% endblock %}

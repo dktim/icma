@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8" http-equiv="refresh" content="30">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+    <meta name="renderer" content="webkit" />
+    <title>高阳通联</title>
+    <link rel="stylesheet" href="/static/styles/index.css">
+</head>
+<body>
+	<div class="bg"></div>
+	<div class="container">
+		<div class="logo"></div>
+		<div class="header">
+			<div class="title">
+				<div class="big-title">{{ret.p_name}}</div>
+				<div class="small-title">
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+			<div class="line"></div>
+			<div class="time"></div>
+			<div class="remark">每3秒更新一次</div>
+		</div>
+		<div class="content">
+			<div class="steps">
+				<div class="steps-title">{{ret.p_name}}</div>
+				<input type='hidden' value='{{ret.p_id}}' class='p_id'>
+				
+				<div class="wrapper"></div>
+			</div>
+			<div class="sub-steps">
+				<div class="sub-steps-title">
+					<div class="step-name"></div>
+					<div class="step-num"></div>
+					<div class="step-fail"></div>
+					<div class="step-time"></div>
+				</div>
+				<div class="wrapper"></div>
+				<div class="operation">
+					负责人：<label id="fzr"></label>　　执行人：<label id="zxr"></label>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="/static/scripts/core.min.js"></script>
+	<script type="text/javascript" src="/static/scripts/index1.js"></script>
+</body>
+</html>

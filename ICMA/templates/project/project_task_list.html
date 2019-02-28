@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+      <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome 4.7.0 -->
+  <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons 2.0.1-->
+  <link rel="stylesheet" href="/static/ionicons/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/styles/index.css">
+   <!--    <script src="/static/scripts/index.js"></script>
+       <script src="/static/scripts/core.min.js"></script> -->
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+{#  <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.css">#}
+  <link rel="stylesheet" href="/static/dist/css/skins/skin-yellow-light.css">
+  <link rel="stylesheet" href="/static/css/loading.css">
+</head>
+<body>
+
+
+<h3>项目名称：{{project_name}}</h3><br>
+<h4>子步骤</h4><br>
+<table class="table">
+    <thead>
+
+<tr>
+    <th>任务名称</th>
+    <th>任务负责人</th>
+    <th>任务执行人</th>
+    <th>预期时间</th>
+
+
+</tr>
+
+    </thead>
+
+
+
+    <tbody>    
+    {% for task in task_info %}
+   <tr> 
+<td>{{task.task_name}}</td>
+<td>{{task.charge_user}}</td>
+<td>{{task.execute_user}}</td>
+<td>{{task.expect_time}}</td>
+      </tr>
+    {% endfor %}
+  
+    
+    </tbody>
+</table>
+
+</body>
+</html>

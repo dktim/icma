@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load mytags %}
+
+{% block content %}
+<script>
+    window.onload=init;
+    function init() {
+        showhide(2);
+    }
+    function showhide(n) {
+        var box = document.getElementById("cmdb");
+        box.className="active";
+        var box = document.getElementById("idc");
+        box.className="active";
+    }
+</script>
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+    </section>
+
+    <!-- Main content -->
+       <section class="content">
+        <form action="" method="post" id="mytask_form">
+        {% csrf_token %}
+            <div class="box">
+                <div class="box-header">
+
+                <div class="col-sm-5" style="padding-left: 0px">
+                            <label>
+                                <select name="project" class="form-control m-b input-sm" onchange="change_info()">
+                                    <option value="">项目名称</option>
+                                    {% for project in projects %}
+                                        {% ifequal project.p_name project_name %}
+                                            <option value="{{project.p_name}}" selected> {{ project.p_name|slice:":20" }}</option>
+                                        {% else %}
+                                            <option value="{{project.p_name}}"> {{ project.p_name|slice:":20" }}</option>
+                                        {% endifequal %}
+                                    {% endfor %}
+                                </select>
+                            </label>
+
+                            <label>
+                                <select name="status" class="form-control m-b input-sm" onchange="change_info()">
+                                    <option value="">子任务状态</option>
+                                    {% for s in audit_status %}
+                                        {% ifequal s.0|int2str status %}
+                                            <option value="{{ s.0 }}" selected> {{ s.1 }}</option>
+                                        {% else %}
+                                            <option value="{{ s.0 }}"> {{ s.1 }}</option>
+                                        {% endifequal %}
+                                    {% endfor %}
+
+                                </select>
+                            </label>
+                        </div>
+                    <div class="col-sm-4" style="padding-right: 0;">
+                             <div class="input-group inline-group padding-right: 10px">
+                                <input type="text" class="form-control m-b " id="search_input" name="keyword" value="{{ keyword }}" placeholder="Search title">
+                                <input type="text" style="display: none">
+                                <div class="input-group-btn ">
+                                    <button id='search_btn' href="{% url 'mytask' %}?search=true" type="button" class="btn btn-primary "  onclick="change_info()">
+                                        <b>&nbsp;搜索&nbsp;</b>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="export"></div>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <table class="table table-striped table-bordered" id="dataform">
+                      <thead>
+                        <tr>
+                            <th>
+                                <input id="checkall" type="checkbox" class="i-checks" name="checkall" value="checkall" data-editable='false' onclick="check_all('asset_form')">
+                            </th>
+
+                                    <th>所属任务</th>
+                                    <th>子任务内容</th>
+                                    <th>子任务负责人</th>
+                                    <th>状态</th>
+                              <th>变更状态</th>
+                                    <!--th class="text-center">功能</th-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subtask  in my_subtask %}
+                                    <tr class="even gradeX">
+                                        <td><input type="checkbox" id="id" class="i-checks" value="{{ task.id }}" name="id" /></td>
+
+                                          <td><b> {{subtask.task}} </b></td>
+                                        <td><b> {{subtask.content}} </b></td>
+
+                                          <td><b> {{subtask.charge_user}} </b></td>
+                                        <td>
+                                          <b>
+                                              {% if subtask.status == '2' %}
+                                            <small class="label pull-right btn bg-red">执行失败</small>
+
+                                              {% elif subtask.status == '1' %}
+
+  <small class="label pull-right btn bg-green">执行成功</small>
+                                                {% elif subtask.status == '0' %}
+
+  <small class="label pull-right btn bg-yellow">未开始</small>
+                                            {% else %}
+                                               <small class="label pull-right btn bg-black">未知</small>
+
+                                              {% endif %}
+                                          </b>
+                                        </td>
+                                     <td>    <a href="#"><li style="list-style-type:none" onclick="return tanchu(this.value)" value="{{ subtask.id }}"> 操作</li></a></td>
+                                      <!--   <td> {{server.finish_date|date:"Y-m-d H:i:s"}} </td>-->
+
+
+<!--td class="text-center" data-editable='false'>
+                                        <a href="#"><li class="btn btn-sm btn-info" onclick="return tanchu(this.value)" value="{#{ host.id }#}"><span class="glyphicon glyphicon-pencil"></span></li></a>
+                                        <a value="" class="btn btn-sm btn-danger asset_del"><span class="glyphicon glyphicon-trash"></span></a>
+                                    	</td-->
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                  </table>
+                </div>
+            </div>
+        </form>
+    </section>
+        <!-- /.content -->
+      </div>
+{#接收子层回传参数#}
+<input id="handle_status" value="" hidden="hidden">
+<script>
+function checkAll(sender, checkClass) {
+    var checkItems = document.getElementsByTagName('input');
+    for (var i = 0; i < checkItems.length; i++) {
+        var checkItem = checkItems[i];
+        if (checkItem.type === 'checkbox' && checkItem.className === 'item1') {
+            checkItem.checked = sender.checked;
+        }
+    }
+}
+</script>
+<script src="/static/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>
+  $(function () {
+{#    $("#example1").DataTable();#}
+    $('#dataform').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true
+    });
+  });
+</script>
+
+<script>
+function tanchu(n){
+  layer.open({
+  type: 2,
+  title: '状态变更',
+  shadeClose: true, //点击遮罩关闭
+  content: ['/project/subtask/edit/' + n,],
+  end:function(){
+        var handle_status = $("#handle_status").val();
+        if ( handle_status == '1' ) {
+        alert('sssss');
+            layer.msg('保存成功！',{
+                icon: 1,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            },function(){
+                history.go(0);
+            });
+        } else if ( handle_status == '2' ) {
+            layer.msg('修改失败！',{
+                icon: 2,
+                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+            },function(){
+                history.go(0);
+            });
+        }
+    }
+  });
+}
+
+
+function change_info(){
+    var args = $("#mytask_form").serialize();
+    window.location = "{% url 'mytask' %}?" + args
+}
+</script>
+{% endblock %}
